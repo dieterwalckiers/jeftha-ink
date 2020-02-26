@@ -57,6 +57,12 @@ const MainMenu = ({ colors }) => {
               linkTo="/about"
               colors={colors}
             />
+            <MenuItem
+              isActive={pathname === "/contact"}
+              value="Contact"
+              linkTo="/contact"
+              colors={colors}
+            />
           </div>
         )
       }}
