@@ -33,7 +33,12 @@ const MenuItem = ({ isActive, value, colors, linkTo }) => {
   )
 }
 
-const MainMenu = ({ colors }) => {
+const MainMenu = ({ colors, menuItemNames }) => {
+  const homeLbl = (menuItemNames && menuItemNames.home) || "Home"
+  const galleryLbl = (menuItemNames && menuItemNames.gallery) || "Galerij"
+  const aboutLbl = (menuItemNames && menuItemNames.about) || "About"
+  const contactLbl = (menuItemNames && menuItemNames.contact) || "Contact"
+
   return (
     <Location>
       {({ location: { pathname } }) => {
@@ -41,25 +46,25 @@ const MainMenu = ({ colors }) => {
           <div>
             <MenuItem
               isActive={pathname === "/"}
-              value="Home"
+              value={homeLbl}
               linkTo="/"
               colors={colors}
             />
             <MenuItem
               isActive={isGalleryPage(pathname)}
-              value="Galerij"
+              value={galleryLbl}
               linkTo="/gallery"
               colors={colors}
             />
             <MenuItem
               isActive={pathname === "/about"}
-              value="About"
+              value={aboutLbl}
               linkTo="/about"
               colors={colors}
             />
             <MenuItem
               isActive={pathname === "/contact"}
-              value="Contact"
+              value={contactLbl}
               linkTo="/contact"
               colors={colors}
             />

@@ -5,21 +5,38 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from "react"
+import React, { useMemo } from "react"
 import PropTypes from "prop-types"
-
+import { useStaticQuery } from "gatsby";
 import Header from "./header"
 import "./layout.css"
 
 const Layout = ({ children }) => {
+  const data = useStaticQuery(graphql`
+    {
+      sanitySiteSettings {
+        backgroundColor {
+          hex
+        }
+      }
+    }
+  `)
+  const bgColor = useMemo(() => {
+    const sanityBgColor = data.sanitySiteSettings.backgroundColor;
+    return sanityBgColor ? sanityBgColor.hex : "#FFFFFF";
+  }, [data])
+
   return (
-    <div className="container mx-auto pt-2" style={{ fontFamily: "Roboto" }}>
-      <Header />
-      <div>
-        <main>{children}</main>
-        <footer></footer>
+    <>
+      <style type="text/css">{`body { background-color: ${bgColor} }`}</style>
+      <div className="container mx-auto pt-2" style={{ fontFamily: "Roboto" }}>
+        <Header />
+        <div>
+          <main>{children}</main>
+          <footer></footer>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

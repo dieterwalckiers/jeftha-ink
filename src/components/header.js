@@ -22,16 +22,35 @@ const Header = () => {
         menuPrimaryColor {
           hex
         }
+        homeMenuItemName
+        galleryMenuItemName
+      }
+      sanityAbout {
+        menuItemName
+      }
+      sanityContact {
+        menuItemName
       }
     }
-  `);
+  `)
 
   const menuColors = useMemo(() => {
-      return {
-          primary: data.sanitySiteSettings.menuPrimaryColor.hex,
-          accent: data.sanitySiteSettings.menuAccentColor.hex,
-      }
-  }, [data]);
+    return {
+      primary: data.sanitySiteSettings.menuPrimaryColor.hex,
+      accent: data.sanitySiteSettings.menuAccentColor.hex,
+    }
+  }, [data])
+
+  console.log("data in header", data);
+
+  const menuItemNames = useMemo(() => {
+    return {
+      home: data.sanitySiteSettings.homeMenuItemName,
+      gallery: data.sanitySiteSettings.galleryMenuItemName,
+      about: data.sanityAbout.menuItemName,
+      contact: data.sanityContact.menuItemName,
+    }
+  }, [data])
 
   return (
     <header className="w-full flex justify-center mt-6 mb-6 flex-col items-center">
@@ -42,7 +61,7 @@ const Header = () => {
           alt="jeftha.ink"
         />
       </Link>
-      <MainMenu colors={menuColors} />
+      <MainMenu colors={menuColors} menuItemNames={menuItemNames} />
     </header>
   )
 }
