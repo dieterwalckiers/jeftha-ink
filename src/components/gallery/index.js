@@ -13,9 +13,8 @@ const tailwindResolutions = {
 const Gallery = ({ projects, highlightsStyle }) => {
 
   const [tailwindResolution, setTailwindResolution] = useState();
-
-  if (typeof window !== `undefined`) { // needed to gatsby build works
-    useEffect(() => {
+  useEffect(() => {
+    if (typeof window !== `undefined`) { // needed to gatsby build works
       const determine = () => {
         if (window.innerWidth >= tailwindResolutions.xl) { return "xl" }
         if (window.innerWidth >= tailwindResolutions.lg) { return "lg" }
@@ -29,19 +28,20 @@ const Gallery = ({ projects, highlightsStyle }) => {
       window.addEventListener("resize", function () {
         setTailwindResolution(determine());
       });
-    }, [window, tailwindResolutions, setTailwindResolution]);
-
-    const renderProjectTile = project => {
-      const tile = (<ProjectTile key={`gal-tile-${project.id}`} project={project} highlightsStyle={highlightsStyle} />)
-      return (!highlightsStyle) ? (
-        <Link to={`/${project.slug.current}`} key={`gal-tile-${project.id}`}>
-          {tile}
-        </Link>
-      ) : (
-          tile
-        )
     }
+  }, [tailwindResolutions, setTailwindResolution, [...(typeof window !== `undefined` ? [window] : [])]]);
+
+  const renderProjectTile = project => {
+    const tile = (<ProjectTile key={`gal-tile-${project.id}`} project={project} highlightsStyle={highlightsStyle} />)
+    return (!highlightsStyle) ? (
+      <Link to={`/${project.slug.current}`} key={`gal-tile-${project.id}`}>
+        {tile}
+      </Link>
+    ) : (
+        tile
+      )
   }
+
 
   const [firstColumn, secondColumn, thirdColumn] = useMemo(() => {
     let i = 0
