@@ -1,51 +1,92 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState, useEffect } from "react"
 import ProjectTile from "./ProjectTile"
 import { byPosition } from "../../helpers"
 import { Link } from "gatsby"
 
+const tailwindResolutions = {
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+};
+
 const Gallery = ({ projects, clickableProjects }) => {
+
+  const [tailwindResolution, setTailwindResolution] = useState();
+
+  useEffect(() => {
+    const determine = () => {
+      if (window.innerWidth >= tailwindResolutions.xl) { return "xl" }
+      if (window.innerWidth >= tailwindResolutions.lg) { return "lg" }
+      if (window.innerWidth >= tailwindResolutions.md) { return "md" }
+      return "sm";
+    }
+    setTailwindResolution(determine());
+    window.addEventListener("orientationchange", function () {
+      setTailwindResolution(determine());
+    });
+    window.addEventListener("resize", function () {
+      setTailwindResolution(determine());
+    });
+  }, [window, tailwindResolutions, setTailwindResolution]);
+
   const renderProjectTile = project => {
-    const tile = (<ProjectTile project={project} />)
+    const tile = (<ProjectTile key={`gal-tile-${project.id}`} project={project} />)
     return (clickableProjects !== false) ? (
-      <Link to={`/${project.slug.current}`} key={`gal-lnk-${project.id}`}>
+      <Link to={`/${project.slug.current}`} key={`gal-tile-${project.id}`}>
         {tile}
       </Link>
     ) : (
-      tile
-    )
+        tile
+      )
   }
 
   const [firstColumn, secondColumn, thirdColumn] = useMemo(() => {
     let i = 0
     const sortedProjects = projects.sort(byPosition)
-    return sortedProjects.reduce(
-      (reduced, { node: project }) => {
-        if (i === 0) {
-          reduced[0].push(project)
-          i++
+    if (["lg", "xl"].includes(tailwindResolution)) {
+      return sortedProjects.reduce(
+        (reduced, { node: project }) => {
+          if (i === 0) {
+            reduced[0].push(project)
+            i++
+            return reduced
+          }
+          if (i === 1) {
+            reduced[1].push(project)
+            i++
+            return reduced
+          }
+          i = 0
+          reduced[2].push(project)
           return reduced
-        }
-        if (i === 1) {
+        },
+        [[], [], []]
+      )
+    }
+    if (tailwindResolution === "md") {
+      return sortedProjects.reduce(
+        (reduced, { node: project }, i) => {
+          if (i % 2 === 0) {
+            reduced[0].push(project)
+            return reduced;
+          }
           reduced[1].push(project)
-          i++
-          return reduced
-        }
-        i = 0
-        reduced[2].push(project)
-        return reduced
-      },
-      [[], [], []]
-    )
-  }, [projects])
+          return reduced;
+        },
+        [[], [], []]);
+    }
+    return [sortedProjects.map(({ node: project }) => project), [], []]
+  }, [projects, tailwindResolution])
 
   const widthClass = useMemo(() => {
     if (!thirdColumn.length) {
-      if (!secondColumn.length) {
+      if (!secondColumn.length) { // 1 column
         return "w-full"
       }
-      return "w-1/2"
+      return "w-full md:w-1/2" // 2 columns
     }
-    return "w-1/3"
+    return "w-full md:w-1/2 lg:w-1/3" // 3 columns
   }, [secondColumn, thirdColumn])
 
   return (
