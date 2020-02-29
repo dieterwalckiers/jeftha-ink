@@ -10,7 +10,7 @@ const tailwindResolutions = {
   xl: 1280,
 };
 
-const Gallery = ({ projects, clickableProjects }) => {
+const Gallery = ({ projects, highlightsStyle }) => {
 
   const [tailwindResolution, setTailwindResolution] = useState();
 
@@ -31,8 +31,8 @@ const Gallery = ({ projects, clickableProjects }) => {
   }, [window, tailwindResolutions, setTailwindResolution]);
 
   const renderProjectTile = project => {
-    const tile = (<ProjectTile key={`gal-tile-${project.id}`} project={project} />)
-    return (clickableProjects !== false) ? (
+    const tile = (<ProjectTile key={`gal-tile-${project.id}`} project={project} highlightsStyle={highlightsStyle} />)
+    return (!highlightsStyle) ? (
       <Link to={`/${project.slug.current}`} key={`gal-tile-${project.id}`}>
         {tile}
       </Link>

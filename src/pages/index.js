@@ -34,7 +34,7 @@ const IndexPage = () => {
   return (
     <Layout>
       <SEO title="Home" />
-      <Gallery projects={data.allSanityProject.edges} clickableProjects={false} />
+      <Gallery projects={data.allSanityProject.edges} highlightsStyle={true} />
     </Layout>
   )
 }

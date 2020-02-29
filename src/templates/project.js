@@ -71,35 +71,54 @@ export default ({ data }) => {
   ]);
 
   const renderPrevArrow = useCallback(() => {
-    return prevSlug && (
-      <Link to={`/${prevSlug}`}>
-        <CaretIcon className="w-8" style={{ transform: "rotate(90deg)" }} />
-      </Link>
-    );
+    return (
+      <div className="w-8">
+        {
+          prevSlug && (
+            <Link to={`/${prevSlug}`}>
+              <CaretIcon className="w-8" style={{ transform: "rotate(90deg)" }} />
+            </Link>
+          )
+        }
+      </div>
+    )
   }, [prevSlug, Link, CaretIcon]);
 
   const renderNextArrow = useCallback(() => {
-    return nextSlug && (
-      <Link to={`/${nextSlug}`}>
-        <CaretIcon className="w-8" style={{ transform: "rotate(-90deg)" }} />
-      </Link>
-    );
+    return (
+      <div className="w-8">
+        {
+          nextSlug && (
+            <Link to={`/${nextSlug}`}>
+              <CaretIcon className="w-8" style={{ transform: "rotate(-90deg)" }} />
+            </Link>
+          )
+        }
+      </div>
+    )
   }, [nextSlug, Link, CaretIcon]);
 
   return (
     <Layout>
-      <div className="projectview w-full flex">
-        <div className="w-1/2 pt-8 pb-8 flex items-center">
+      <div className="projectview w-full lg:flex">
+        <div className="lg:w-1/2 pt-8 pb-8 flex items-center">
           {renderPrevArrow()}
           <Image fluid={mainImage.asset.fluid} alt={title} className="w-full" />
           {renderNextArrow()}
         </div>
-        <div className="w-1/2 p-12 flex flex-col items-center relative">
-          <Link to="/gallery">
-            <CloseIcon className="absolute right-0 top-0 w-6" />
+        <div className="p-8 flex flex-col items-center relative lg:w-1/2 lg:flex lg:flex-col justify-center items-center">
+          <Link to="/gallery" className="hidden lg:block">
+            <CloseIcon className="absolute right-0 top-0 w-6 mt-8 mr-8" />
           </Link>
           <h1 className="font-thin text-3xl">{title}</h1>
-          <p className="mt-8">{description}</p>
+          <p className="m-4">{description}</p>
+          <div className="text-center lg:absolute lg:bottom-0 lg:w-full lg:mb-8">
+            <Link to="/gallery">
+              <label className="mx-auto my-12 underline text-teal-800">
+                Terug naar de Galerij
+              </label>
+            </Link>
+          </div>
         </div>
       </div>
     </Layout>
