@@ -14,31 +14,33 @@ const Gallery = ({ projects, highlightsStyle }) => {
 
   const [tailwindResolution, setTailwindResolution] = useState();
 
-  useEffect(() => {
-    const determine = () => {
-      if (window.innerWidth >= tailwindResolutions.xl) { return "xl" }
-      if (window.innerWidth >= tailwindResolutions.lg) { return "lg" }
-      if (window.innerWidth >= tailwindResolutions.md) { return "md" }
-      return "sm";
-    }
-    setTailwindResolution(determine());
-    window.addEventListener("orientationchange", function () {
+  if (typeof window !== `undefined`) { // needed to gatsby build works
+    useEffect(() => {
+      const determine = () => {
+        if (window.innerWidth >= tailwindResolutions.xl) { return "xl" }
+        if (window.innerWidth >= tailwindResolutions.lg) { return "lg" }
+        if (window.innerWidth >= tailwindResolutions.md) { return "md" }
+        return "sm";
+      }
       setTailwindResolution(determine());
-    });
-    window.addEventListener("resize", function () {
-      setTailwindResolution(determine());
-    });
-  }, [window, tailwindResolutions, setTailwindResolution]);
+      window.addEventListener("orientationchange", function () {
+        setTailwindResolution(determine());
+      });
+      window.addEventListener("resize", function () {
+        setTailwindResolution(determine());
+      });
+    }, [window, tailwindResolutions, setTailwindResolution]);
 
-  const renderProjectTile = project => {
-    const tile = (<ProjectTile key={`gal-tile-${project.id}`} project={project} highlightsStyle={highlightsStyle} />)
-    return (!highlightsStyle) ? (
-      <Link to={`/${project.slug.current}`} key={`gal-tile-${project.id}`}>
-        {tile}
-      </Link>
-    ) : (
-        tile
-      )
+    const renderProjectTile = project => {
+      const tile = (<ProjectTile key={`gal-tile-${project.id}`} project={project} highlightsStyle={highlightsStyle} />)
+      return (!highlightsStyle) ? (
+        <Link to={`/${project.slug.current}`} key={`gal-tile-${project.id}`}>
+          {tile}
+        </Link>
+      ) : (
+          tile
+        )
+    }
   }
 
   const [firstColumn, secondColumn, thirdColumn] = useMemo(() => {
