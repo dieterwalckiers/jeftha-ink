@@ -114,7 +114,7 @@ export default ({ data }) => {
           <p className="m-4">{description}</p>
           <div className="text-center lg:absolute lg:bottom-0 lg:w-full lg:mb-8">
             <Link to="/gallery">
-              <label className="mx-auto my-12 underline text-teal-800">
+              <label className="mx-auto my-12 text-teal-800 text-xs">
                 Terug naar de Galerij
               </label>
             </Link>

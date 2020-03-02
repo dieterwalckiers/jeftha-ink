@@ -33,7 +33,7 @@ const GalleryPage = () => {
   console.log("gallery projects", data);
   return (
     <Layout>
-      <SEO title="Home" />
+      <SEO title="Galerij" />
       <Gallery projects={data.allSanityProject.edges} />
     </Layout>
   )
