@@ -11,7 +11,7 @@ const Header = ({ project }) => {
 }
 
 const ProjectTile = props => {
-  const { project, highlightsStyle } = props
+  const { project, highlightsStyle, tailwindResolution } = props
   const wrapperRef = useRef(null)
 
   const [wrapperStyle, setWrapperStyle] = useState({})
@@ -20,7 +20,9 @@ const ProjectTile = props => {
   const [hoverEffectActive, setHoverEffectActive] = useState()
 
   const activateHoverEffect = useCallback(() => {
-    setHoverEffectActive(true)
+    if (!highlightsStyle && tailwindResolution !== "sm") {
+      setHoverEffectActive(true)
+    }
   }, [setHoverEffectActive])
 
   useEffect(() => {
