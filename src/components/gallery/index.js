@@ -117,12 +117,12 @@ const Gallery = ({ projects, highlightsStyle }) => {
   return (
     <div className="flex flex-wrap">
       <div className={widthClass}>{firstColumn.map(renderProjectTile)}</div>
-      {secondColumn.length && (
+      {secondColumn.length ? (
         <div className={widthClass}>{secondColumn.map(renderProjectTile)}</div>
-      )}
-      {thirdColumn.length && (
+      ) : null}
+      {thirdColumn.length ? (
         <div className={widthClass}>{thirdColumn.map(renderProjectTile)}</div>
-      )}
+      ) : null}
     </div>
   )
 }
