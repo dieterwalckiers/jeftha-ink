@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect, useCallback } from "react"
 import Image from "gatsby-image"
 
 const Header = ({ project }) => {
@@ -17,8 +17,20 @@ const ProjectTile = props => {
   const [wrapperStyle, setWrapperStyle] = useState({})
   const [imageStyle, setImageStyle] = useState({})
   const [origDims, setOrigDims] = useState()
+  const [hoverEffectActive, setHoverEffectActive] = useState()
 
-  const startHover = () => {
+  const activateHoverEffect = useCallback(() => {
+    setHoverEffectActive(true)
+  }, [setHoverEffectActive])
+
+  useEffect(() => {
+    setTimeout(activateHoverEffect, 500)
+  }, [])
+
+  const startHover = useCallback(() => {
+    if (!hoverEffectActive) {
+      return
+    }
     const {
       clientWidth: currentWidth,
       clientHeight: currentHeight,
@@ -37,12 +49,29 @@ const ProjectTile = props => {
     setTimeout(() => {
       setImageStyle({ ...imageStyle, width, height, top: -10, left: -10 })
     }, 0)
-  }
+  }, [
+    hoverEffectActive,
+    wrapperRef,
+    setOrigDims,
+    setWrapperStyle,
+    setImageStyle,
+    setImageStyle,
+    imageStyle,
+  ])
 
-  const stopHover = () => {
+  const stopHover = useCallback(() => {
+    if (!hoverEffectActive) {
+      return
+    }
     origDims &&
-      setImageStyle({ ...imageStyle, width: origDims[0], height: origDims[1], top: 0, left: 0 })
-  }
+      setImageStyle({
+        ...imageStyle,
+        width: origDims[0],
+        height: origDims[1],
+        top: 0,
+        left: 0,
+      })
+  }, [hoverEffectActive, origDims, setImageStyle, imageStyle])
 
   return (
     <div
