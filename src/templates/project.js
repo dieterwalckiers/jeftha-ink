@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react"
+import React, { useMemo, useCallback, useEffect, useState } from "react"
 import { graphql, Link } from "gatsby"
 import Layout from "../components/layout"
 import Image from "gatsby-image"
@@ -82,7 +82,7 @@ export default ({ data }) => {
         }
       </div>
     )
-  }, [prevSlug, Link, CaretIcon]);
+  }, [prevSlug]);
 
   const renderNextArrow = useCallback(() => {
     return (
@@ -96,14 +96,19 @@ export default ({ data }) => {
         }
       </div>
     )
-  }, [nextSlug, Link, CaretIcon]);
+  }, [nextSlug]);
+
+  let [blur, setBlur] = useState(10);
+  useEffect(() => {
+      setBlur(0);
+  }, []);
 
   return (
     <Layout>
       <div className="projectview w-full lg:flex">
         <div className="lg:w-1/2 pt-8 pb-8 flex items-center">
           {renderPrevArrow()}
-          <Image fluid={mainImage.asset.fluid} alt={title} className="w-full" />
+          <Image fluid={mainImage.asset.fluid} alt={title} className="w-full" imgStyle={{ transition: "filter .5s", filter: `blur(${blur}px)` }} />
           {renderNextArrow()}
         </div>
         <div className="p-8 flex flex-col items-center relative lg:w-1/2 lg:flex lg:flex-col justify-center items-center">
