@@ -1,10 +1,10 @@
-import React, { useMemo, useCallback, useEffect, useState } from "react"
+import React, { useRef, useMemo, useCallback, useEffect, useState } from "react"
 import { graphql, Link } from "gatsby"
 import Layout from "../components/layout"
 import Image from "gatsby-image"
 import CloseIcon from "./close.inline.svg"
-import CaretIcon from "./caret.inline.svg";
-import { byPosition } from "../helpers";
+import CaretIcon from "./caret.inline.svg"
+import { byPosition } from "../helpers"
 
 export const query = graphql`
   query($slug: String) {
@@ -40,75 +40,89 @@ export default ({ data }) => {
     sanityProject: { id: projectId, title, mainImage, description },
   } = data
 
-  const sortedAllSanityProjectEdges = useMemo(() => allSanityProjectEdges.sort(byPosition), [allSanityProjectEdges]);
+  const sortedAllSanityProjectEdges = useMemo(
+    () => allSanityProjectEdges.sort(byPosition),
+    [allSanityProjectEdges]
+  )
 
   /*
-  * @param id the id of the project
-  * @param isNext true if next neigbour false if previous
-  */
-  const findNeighbourEdge = useCallback((id, isNext) => {
-    const i = sortedAllSanityProjectEdges.findIndex(({ node: { id: projId } }) => projId === id);
-    if (i === -1) {
-      return undefined;
-    }
-    if (isNext && ((i + 1) < sortedAllSanityProjectEdges.length)) {
-      return sortedAllSanityProjectEdges[i + 1];
-    }
-    if (!isNext && ((i - 1) >= 0)) {
-      return sortedAllSanityProjectEdges[i - 1];
-    }
-    return undefined;
-  }, [sortedAllSanityProjectEdges]);
+   * @param id the id of the project
+   * @param isNext true if next neigbour false if previous
+   */
+  const findNeighbourEdge = useCallback(
+    (id, isNext) => {
+      const i = sortedAllSanityProjectEdges.findIndex(
+        ({ node: { id: projId } }) => projId === id
+      )
+      if (i === -1) {
+        return undefined
+      }
+      if (isNext && i + 1 < sortedAllSanityProjectEdges.length) {
+        return sortedAllSanityProjectEdges[i + 1]
+      }
+      if (!isNext && i - 1 >= 0) {
+        return sortedAllSanityProjectEdges[i - 1]
+      }
+      return undefined
+    },
+    [sortedAllSanityProjectEdges]
+  )
 
   const [prevSlug, nextSlug] = useMemo(() => {
-    const prevNeighbour = findNeighbourEdge(projectId, false);
-    const nextNeighbour = findNeighbourEdge(projectId, true);
-    const prevSlug = prevNeighbour && prevNeighbour.node.slug.current;
-    const nextSlug = nextNeighbour && nextNeighbour.node.slug.current;
-    return [prevSlug, nextSlug];
-  }, [
-    findNeighbourEdge, projectId
-  ]);
+    const prevNeighbour = findNeighbourEdge(projectId, false)
+    const nextNeighbour = findNeighbourEdge(projectId, true)
+    const prevSlug = prevNeighbour && prevNeighbour.node.slug.current
+    const nextSlug = nextNeighbour && nextNeighbour.node.slug.current
+    return [prevSlug, nextSlug]
+  }, [findNeighbourEdge, projectId])
 
   const renderPrevArrow = useCallback(() => {
     return (
       <div className="w-8">
-        {
-          prevSlug && (
-            <Link to={`/${prevSlug}`}>
-              <CaretIcon className="w-8" style={{ transform: "rotate(90deg)" }} />
-            </Link>
-          )
-        }
+        {prevSlug && (
+          <Link to={`/${prevSlug}`}>
+            <CaretIcon className="w-8" style={{ transform: "rotate(90deg)" }} />
+          </Link>
+        )}
       </div>
     )
-  }, [prevSlug]);
+  }, [prevSlug])
 
   const renderNextArrow = useCallback(() => {
     return (
       <div className="w-8">
-        {
-          nextSlug && (
-            <Link to={`/${nextSlug}`}>
-              <CaretIcon className="w-8" style={{ transform: "rotate(-90deg)" }} />
-            </Link>
-          )
-        }
+        {nextSlug && (
+          <Link to={`/${nextSlug}`}>
+            <CaretIcon
+              className="w-8"
+              style={{ transform: "rotate(-90deg)" }}
+            />
+          </Link>
+        )}
       </div>
     )
-  }, [nextSlug]);
+  }, [nextSlug])
 
-  let [blur, setBlur] = useState(0);
-//   useEffect(() => { // doesn't work in FF yet
-//       setBlur(0);
-//   }, []);
+  let [blur, setBlur] = useState(10)
+  useEffect(() => {
+    setBlur(0)
+  }, [])
 
   return (
     <Layout>
       <div className="projectview w-full lg:flex">
         <div className="lg:w-1/2 pt-8 pb-8 flex items-center">
           {renderPrevArrow()}
-          <Image fluid={mainImage.asset.fluid} alt={title} className="w-full" imgStyle={{ transition: "filter .5s", filter: `blur(${blur}px)` }} />
+          <div
+            className="w-full"
+            style={{ transition: "filter .5s", filter: `blur(${blur}px)` }}
+          >
+            <Image
+              fluid={mainImage.asset.fluid}
+              alt={title}
+              className="theimg w-full"
+            />
+          </div>
           {renderNextArrow()}
         </div>
         <div className="p-8 flex flex-col items-center relative lg:w-1/2 lg:flex lg:flex-col justify-center items-center">
