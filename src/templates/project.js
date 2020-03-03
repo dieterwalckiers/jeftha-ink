@@ -98,10 +98,10 @@ export default ({ data }) => {
     )
   }, [nextSlug]);
 
-  let [blur, setBlur] = useState(10);
-  useEffect(() => {
-      setBlur(0);
-  }, []);
+  let [blur, setBlur] = useState(0);
+//   useEffect(() => { // doesn't work in FF yet
+//       setBlur(0);
+//   }, []);
 
   return (
     <Layout>
