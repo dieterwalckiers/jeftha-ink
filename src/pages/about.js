@@ -2,23 +2,26 @@ import React, { useMemo } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import PortableText from "@sanity/block-content-to-react";
 
 const AboutPage = () => {
   const data = useStaticQuery(graphql`
     {
       sanityAbout {
         title
-        description
+        _rawDescription(resolveReferences: {maxDepth: 5})
       }
     }
   `)
 
   const [title, description] = useMemo(() => {
     const {
-      sanityAbout: { title, description },
+      sanityAbout: { title, _rawDescription },
     } = data
-    return [title, description]
-  }, [data])
+    return [title, _rawDescription]
+  }, [data]);
+
+  console.log("rendering description", description);
 
   return (
     <Layout>
@@ -27,7 +30,7 @@ const AboutPage = () => {
         <h1 className="font-light text-gray-700 text-3xl mt-8 mb-12">
           {title}
         </h1>
-        <div className="">{description}</div>
+        {description && <PortableText blocks={description} />}
       </div>
     </Layout>
   )
