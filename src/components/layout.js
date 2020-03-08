@@ -7,7 +7,7 @@
 
 import React, { useMemo } from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery } from "gatsby";
+import { useStaticQuery } from "gatsby"
 import Header from "./header"
 import "./layout.css"
 
@@ -18,18 +18,30 @@ const Layout = ({ children }) => {
         backgroundColor {
           hex
         }
+        googleFontName
       }
     }
   `)
   const bgColor = useMemo(() => {
-    const sanityBgColor = data.sanitySiteSettings.backgroundColor;
-    return sanityBgColor ? sanityBgColor.hex : "#FFFFFF";
+    const sanityBgColor = data.sanitySiteSettings.backgroundColor
+    return sanityBgColor ? sanityBgColor.hex : "#FFFFFF"
+  }, [data])
+
+  const [googleFontName, googleFontLink] = useMemo(() => {
+    const { googleFontName } = data.sanitySiteSettings
+    return googleFontName ? [googleFontName, (
+      <link
+        href={`https://fonts.googleapis.com/css?family=${googleFontName.replace(/ /,"+")}&display=swap`}
+        rel="stylesheet"
+      />
+    )] : [undefined, null]
   }, [data])
 
   return (
     <>
-      <style type="text/css">{`body { background-color: ${bgColor} }`}</style>
-      <div className="container mx-auto pt-2" style={{ fontFamily: "Roboto" }}>
+      {googleFontLink}
+      <style type="text/css">{`body { background-color: ${bgColor};}`}</style>
+      <div className="container mx-auto pt-2" style={{ fontFamily: googleFontName || "Roboto" }}>
         <Header />
         <div>
           <main>{children}</main>
