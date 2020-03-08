@@ -18,7 +18,7 @@ const MenuItem = ({ isActive, value, colors, linkTo }) => {
       color: colors.primary,
       ...(isActive || isHovered ? { color: colors.accent } : {}),
     }),
-    [isActive, isHovered]
+    [isActive, isHovered, colors]
   )
   return (
     <Link

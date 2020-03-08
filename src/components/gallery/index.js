@@ -12,6 +12,9 @@ const tailwindResolutions = {
 
 const Gallery = ({ projects, highlightsStyle }) => {
   const [tailwindResolution, setTailwindResolution] = useState()
+
+  const maybeWindowDep = (typeof window !== `undefined`) ? window : undefined;
+
   useEffect(() => {
     if (typeof window !== `undefined`) {
       // needed to gatsby build works
@@ -36,13 +39,12 @@ const Gallery = ({ projects, highlightsStyle }) => {
       })
     }
   }, [
-    tailwindResolutions,
     setTailwindResolution,
-    [...(typeof window !== `undefined` ? [window] : [])],
+    maybeWindowDep,
   ])
 
   const renderProjectTile = useCallback(
-    project => {
+    (project) => {
       const tile = (
         <ProjectTile
           key={`gal-tile-${project.id}`}
@@ -61,7 +63,7 @@ const Gallery = ({ projects, highlightsStyle }) => {
         tile
       )
     },
-    [ProjectTile, highlightsStyle, tailwindResolution, Link]
+    [highlightsStyle, tailwindResolution]
   )
 
   const [firstColumn, secondColumn, thirdColumn] = useMemo(() => {

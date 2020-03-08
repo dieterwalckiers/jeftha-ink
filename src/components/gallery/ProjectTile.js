@@ -23,11 +23,11 @@ const ProjectTile = props => {
     if (!highlightsStyle && tailwindResolution !== "sm") {
       setHoverEffectActive(true)
     }
-  }, [setHoverEffectActive])
+  }, [highlightsStyle, tailwindResolution, setHoverEffectActive])
 
   useEffect(() => {
     setTimeout(activateHoverEffect, 500)
-  }, [])
+  }, [activateHoverEffect])
 
   const startHover = useCallback(() => {
     if (!hoverEffectActive) {
@@ -57,7 +57,6 @@ const ProjectTile = props => {
     setOrigDims,
     setWrapperStyle,
     setImageStyle,
-    setImageStyle,
     imageStyle,
   ])
 
@@ -82,6 +81,8 @@ const ProjectTile = props => {
       ref={wrapperRef}
       style={wrapperStyle}
       className="m-2 md:mb-4 overflow-hidden relative"
+      role="link"
+      tabIndex={project.position}
     >
       {!highlightsStyle && <Header project={project} />}
       <Image

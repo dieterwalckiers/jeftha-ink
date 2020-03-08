@@ -7,7 +7,7 @@
 
 import React, { useMemo } from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery } from "gatsby"
+import { useStaticQuery, graphql } from "gatsby"
 import Header from "./header"
 import "./layout.css"
 
