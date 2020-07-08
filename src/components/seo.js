@@ -37,7 +37,7 @@ function SEO({ description, lang, meta, title }) {
       meta={[
         {
           name: `description`,
-          content: metaDescription,
+          content: "Jeftha.ink artiestenpagina", // metaDescription,
         },
         {
           property: `og:title`,
