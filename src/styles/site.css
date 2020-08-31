@@ -3,3 +3,16 @@
 @tailwind components;
 
 @tailwind utilities;
+
+
+h1 {
+    font-weight: 300;
+    color: #4a5568;
+    font-size: 1.875rem;
+    margin: 18px 0;
+    text-align: center;
+}
+
+p {
+    min-height: 1em; /* makes sure that returns in block content are rendered */
+}

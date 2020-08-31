@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from "react"
-import { Link } from "gatsby"
+import { Link, useStaticQuery, graphql } from "gatsby"
 import { Location } from "@reach/router"
 
-const isGalleryPage = pathname =>
-  !["about", "contact", ""].includes(pathname.replace(/\//, ""))
+const isGalleryPage = (pathname, contentPageSlugs) =>
+  !["about", "contact", ""].includes(pathname.replace(/\//, "")) &&
+  !contentPageSlugs.includes(pathname.replace(/\//, ""));
 
 const MenuItem = ({ isActive, value, colors, linkTo }) => {
   const [isHovered, setIsHovered] = useState(false)
@@ -23,7 +24,7 @@ const MenuItem = ({ isActive, value, colors, linkTo }) => {
   return (
     <Link
       to={linkTo}
-      className="menuitem transition duration-500 transition-colors ml-2 mr-2"
+      className="menuitem duration-500 transition-colors ml-2 mr-2"
       style={style}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -39,6 +40,26 @@ const MainMenu = ({ colors, menuItemNames }) => {
   const aboutLbl = (menuItemNames && menuItemNames.about) || "About"
   const contactLbl = (menuItemNames && menuItemNames.contact) || "Contact"
 
+  const data = useStaticQuery(graphql`
+    {
+      allSanityContentPage {
+        nodes {
+          menuName
+          slug {
+            current
+          }
+        }
+      }
+    }
+  `);
+
+  const contentPagesInfos = useMemo(() => {
+    const {
+      allSanityContentPage: { nodes },
+    } = data;
+    return nodes.map(({ menuName, slug: { current } }) => ({ menuName, currentSlug: current }));
+  }, [data]);
+
   return (
     <Location>
       {({ location: { pathname } }) => {
@@ -51,11 +72,20 @@ const MainMenu = ({ colors, menuItemNames }) => {
               colors={colors}
             />
             <MenuItem
-              isActive={isGalleryPage(pathname)}
+              isActive={isGalleryPage(pathname, contentPagesInfos.map(({ currentSlug }) => currentSlug))}
               value={galleryLbl}
               linkTo="/gallery"
               colors={colors}
             />
+            {contentPagesInfos.map(page => (
+              <MenuItem
+                key={`cp${page.currentSlug}`}
+                isActive={pathname === `/${page.currentSlug}`}
+                value={page.menuName}
+                linkTo={`/${page.currentSlug}`}
+                colors={colors}
+              />
+            ))}
             <MenuItem
               isActive={pathname === "/about"}
               value={aboutLbl}

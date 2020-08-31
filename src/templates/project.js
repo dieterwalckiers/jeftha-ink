@@ -125,7 +125,7 @@ export default ({ data }) => {
           </div>
           {renderNextArrow()}
         </div>
-        <div className="p-8 flex flex-col items-center relative lg:w-1/2 lg:flex lg:flex-col justify-center items-center">
+        <div className="p-8 flex flex-col items-center relative lg:w-1/2 lg:flex lg:flex-col justify-center">
           <Link to="/gallery" className="hidden lg:block">
             <CloseIcon className="absolute right-0 top-0 w-6 mt-8 mr-8" />
           </Link>

@@ -6,7 +6,34 @@
 
 const path = require("path")
 
-exports.createPages = async ({ actions, graphql }) => {
+async function createContentPages(actions, graphql) {
+  const result = await graphql(`
+    {
+      allSanityContentPage {
+        edges {
+          node {
+            slug {
+              current
+            }
+          }
+        }
+      }
+    }
+  `)
+  const contentPages = result.data.allSanityContentPage.edges.map(({ node }) => node)
+
+  contentPages.forEach(contentPage => {
+    actions.createPage({
+      path: contentPage.slug.current,
+      component: path.resolve("./src/templates/contentPage.js"),
+      context: {
+        slug: contentPage.slug.current,
+      },
+    })
+  })
+}
+
+async function createProjectPages(actions, graphql) {
   const result = await graphql(`
     {
       allSanityProject {
@@ -31,4 +58,9 @@ exports.createPages = async ({ actions, graphql }) => {
       },
     })
   })
+}
+
+exports.createPages = async ({ actions, graphql }) => {
+  await createContentPages(actions, graphql);
+  await createProjectPages(actions, graphql);
 }
