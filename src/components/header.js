@@ -25,12 +25,6 @@ const Header = () => {
         homeMenuItemName
         galleryMenuItemName
       }
-      sanityAbout {
-        menuItemName
-      }
-      sanityContact {
-        menuItemName
-      }
     }
   `)
 
@@ -47,8 +41,6 @@ const Header = () => {
     return {
       home: data.sanitySiteSettings.homeMenuItemName,
       gallery: data.sanitySiteSettings.galleryMenuItemName,
-      about: data.sanityAbout.menuItemName,
-      contact: data.sanityContact.menuItemName,
     }
   }, [data])
 

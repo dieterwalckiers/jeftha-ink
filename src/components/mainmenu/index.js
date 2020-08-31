@@ -3,7 +3,7 @@ import { Link, useStaticQuery, graphql } from "gatsby"
 import { Location } from "@reach/router"
 
 const isGalleryPage = (pathname, contentPageSlugs) =>
-  !["about", "contact", ""].includes(pathname.replace(/\//, "")) &&
+  ![/*"about", "contact",*/""].includes(pathname.replace(/\//, "")) &&
   !contentPageSlugs.includes(pathname.replace(/\//, ""));
 
 const MenuItem = ({ isActive, value, colors, linkTo }) => {
@@ -37,8 +37,6 @@ const MenuItem = ({ isActive, value, colors, linkTo }) => {
 const MainMenu = ({ colors, menuItemNames }) => {
   const homeLbl = (menuItemNames && menuItemNames.home) || "Home"
   const galleryLbl = (menuItemNames && menuItemNames.gallery) || "Galerij"
-  const aboutLbl = (menuItemNames && menuItemNames.about) || "About"
-  const contactLbl = (menuItemNames && menuItemNames.contact) || "Contact"
 
   const data = useStaticQuery(graphql`
     {
@@ -86,18 +84,6 @@ const MainMenu = ({ colors, menuItemNames }) => {
                 colors={colors}
               />
             ))}
-            <MenuItem
-              isActive={pathname === "/about"}
-              value={aboutLbl}
-              linkTo="/about"
-              colors={colors}
-            />
-            <MenuItem
-              isActive={pathname === "/contact"}
-              value={contactLbl}
-              linkTo="/contact"
-              colors={colors}
-            />
           </div>
         )
       }}
