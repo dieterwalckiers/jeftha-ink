@@ -27,13 +27,11 @@ module.exports = {
     },
     "gatsby-plugin-postcss",
     {
-      resolve: `gatsby-plugin-prefetch-google-fonts`,
+      resolve: `gatsby-plugin-google-fonts-v2`,
       options: {
         fonts: [
           {
-            family: `Roboto`,
-            subsets: [`latin`],
-            variants: [`200`, `300`, `400`, `700`],
+            family: `Roboto:wght@200;300;400;700`,
           },
         ],
       },
